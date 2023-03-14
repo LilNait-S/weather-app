@@ -7,18 +7,25 @@ import { useWeather } from "./hooks/useWeather";
 const App = () => {
   const { search, setSearch, error } = useSearch();
   const [units, setUnits] = useState("metric");
-  const { weather, getWeather, loading } = useWeather({
+  const {
+    weather,
+    getWeather,
+    loading,
+    getWeatherPosition,
+    weatherPosition,
+    setWeather,
+  } = useWeather({
     search,
     unitsOfMeasurement: units,
   });
 
-  console.log(weather);
+  console.log(weatherPosition);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const fields = Object.fromEntries(new window.FormData(e.target));
     const { city } = fields;
-    getWeather({search , unitsOfMeasurement: units});
+    getWeather({ search, unitsOfMeasurement: units });
   };
 
   const handleChange = (e) => {
@@ -26,19 +33,26 @@ const App = () => {
   };
 
   const handleUnits = (e) => {
-    const newUnit = e
+    const newUnit = e;
     setUnits(newUnit);
-    getWeather({search , unitsOfMeasurement : newUnit});
+    getWeather({ search, unitsOfMeasurement: newUnit });
   };
 
   const handleCity = (e) => {
-    const newCity = e
-    setSearch(newCity)
-    console.log(newCity)
-    getWeather({search : newCity , unitsOfMeasurement : units });
-  }
+    const newCity = e;
+    setSearch(newCity);
+    getWeather({ search: newCity, unitsOfMeasurement: units });
+  };
 
- 
+  const handleLocalPosition = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        let lat = position.coords.latitude;
+        let lon = position.coords.longitude;
+        getWeatherPosition({ unitsOfMeasurement: units, lat, lon });
+      });
+    }
+  };
 
   return (
     <div className="bg-gradient-to-r from-violet-600 to-indigo-600 h-full text-white ">
@@ -52,6 +66,7 @@ const App = () => {
           handleUnits={handleUnits}
           units={units}
           weather={weather}
+          handleLocalPosition={handleLocalPosition}
         />
       </div>
     </div>

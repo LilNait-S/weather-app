@@ -3,15 +3,15 @@ import { DateTime } from "luxon";
 const API_KEY = import.meta.env.VITE_API_KEY;
 const BASE_URL = "https://api.openweathermap.org/data/2.5";
 
-export const getWeatherData = async ({ search, unitsOfMeasurement}) => {
+export const getWeatherData = async ({ search, unitsOfMeasurement }) => {
   if (search === "") return null;
- 
+
   try {
     const res = await fetch(
       `${BASE_URL}/weather?q=${search}&appid=${API_KEY}&units=${unitsOfMeasurement}`
     );
 
-    console.log(res)
+    console.log(res);
     const data = await res.json();
 
     const formattedWeatherData = {
@@ -85,3 +85,42 @@ export const formatToLocalTime = (
 
 export const iconUrlFromCode = (code) =>
   `https://openweathermap.org/img/wn/${code}@2x.png`;
+
+export const getWeatherDataPosition = async ({
+  unitsOfMeasurement,
+  lat,
+  lon,
+}) => {
+  if( lon === undefined) return null;
+  try {
+    const res = await fetch(
+      `${BASE_URL}/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${unitsOfMeasurement}`
+    );
+
+    console.log(res);
+    const data = await res.json();
+
+    const formattedWeatherData = {
+      lon: data.coord.lon,
+      lat: data.coord.lat,
+      temp: data.main.temp,
+      feels_like: data.main.feels_like,
+      temp_min: data.main.temp_min,
+      temp_max: data.main.temp_max,
+      humidity: data.main.humidity,
+      name: data.name,
+      dt: data.dt,
+      country: data.sys.country,
+      sunrise: data.sys.sunrise,
+      sunset: data.sys.sunset,
+      speed: data.wind.speed,
+      main: data.weather[0].main,
+      description: data.weather[0].description,
+      icon: data.weather[0].icon,
+    };
+
+    return { formattedWeatherData, unitsOfMeasurement };
+  } catch (e) {
+    throw new Error("error searching weather");
+  }
+};

@@ -9,6 +9,7 @@ const Header = ({
   handleUnits,
   units,
   weather,
+  handleLocalPosition
 }) => {
   return (
     <>
@@ -19,6 +20,7 @@ const Header = ({
         error={error}
         handleUnits={handleUnits}
         units={units}
+        handleLocalPosition={handleLocalPosition}
       />
       <Weather weather={weather} />
     </>

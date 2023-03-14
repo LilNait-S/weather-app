@@ -8,12 +8,13 @@ const Search = ({
   error,
   handleUnits,
   units,
+  handleLocalPosition
 }) => {
   return (
-    <div className="flex justify-between items-center gap-10 py-4 max-w-5xl mx-auto">
-      <div className="flex items-center gap-5">
+    <div className="flex justify-between items-center gap-10 py-4 max-w-5xl mx-auto flex-wrap ">
+      <div className="flex items-center flex-wrap justify-center w-full gap-5">
         <div>
-          <form className="flex items-center gap-5" onSubmit={handleSubmit}>
+          <form className="flex items-center flex-wrap justify-center gap-5" onSubmit={handleSubmit}>
             <input
               style={{
                 border: "1px solid transparent",
@@ -38,10 +39,10 @@ const Search = ({
         <IoLocationOutline
           size={33}
           className="text-white cursor-pointer transition ease-out hover:scale-110"
-          onClick={() => {}}
+          onClick={() => {handleLocalPosition()}}
         />
       </div>
-      <div className="flex gap-5 text-3xl">
+      <div className="flex gap-5 text-3xl justify-center w-full">
         <button
           onClick={() => {
             handleUnits("metric");
